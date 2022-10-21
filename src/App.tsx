@@ -72,13 +72,18 @@ function App() {
     if (!videoAreaRef.current) return;
     const height = videoAreaRef.current.getBoundingClientRect().height - VIDEO_AREA_PADDING * 2;
     setVideoHeight(height);
+    
   }, []);
 
   const calculateVideoWidth = useCallback((videoHeightParam: number, streamParam: MediaStream | null) => {
     const settings = streamParam?.getVideoTracks()[0].getSettings();
+    console.log('settings', settings);
+    console.log('videoHeightParam', videoHeightParam);
+    console.log('streamParam', streamParam);
     if (settings && videoHeightParam) {
       const width = videoHeightParam * (settings.aspectRatio || 16 / 9);
-      setVideoWidth(width);
+    setVideoWidth(width);
+      
     }
   }, []);
 
@@ -153,10 +158,17 @@ function App() {
       const blob = new Blob(recordingChunks.current);
       recordingBlob.current = blob;
       const url = URL.createObjectURL(blob);
+      console.log('url', url);
+      console.log('blob', blob);
+      console.log('recordingChunks', recordingChunks.current);
       setDownloadLink(url);
+      console.log('downloadLink', downloadLink);
+      console.log('mediaRecorder.current', mediaRecorder.current);
       setIsRecordingRunning(false);
-      setDownloadFileName(`${new Date().toISOString()}.webm`);
+      setDownloadFileName(`${new Date().toISOString()}.mp4`);
+      console.log('Download link', `${new Date().toISOString()}.webm`);
       stream.current!.getTracks().forEach((track) => track.stop());
+      console.log('stream.current', stream.current?.getVideoTracks());
       setRecordingTime(0);
       recordingChunks.current = [];
       mediaRecorder.current = null;
